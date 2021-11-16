@@ -37,5 +37,5 @@ for geoid in continent_ids:
         continents[cont["continentCode"]] = cont
 
 
-with open("src/continents.json", "w") as f:
-    json.dump(continents, f)
+with open("src/continents.json", "w", encoding="utf-8") as f:
+    json.dump(continents, f, separators=(",", ":"), ensure_ascii=False)

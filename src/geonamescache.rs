@@ -1,8 +1,6 @@
 use std::sync::Mutex;
 use std::{collections::HashMap, sync::Arc};
 
-use serde::Deserialize;
-
 use crate::geotypes::{City, Continent, Country, UsCounty, UsState};
 
 pub struct Geonamescache {
@@ -14,14 +12,21 @@ pub struct Geonamescache {
     cities_by_name_cache: Mutex<HashMap<String, Arc<HashMap<String, City>>>>,
 }
 
+macro_rules! load_data {
+    ($path:literal) => {
+        serde_json::from_str(include_str!($path))
+            .expect(concat!("Internal error when loading file: ", $path))
+    };
+}
+
 impl Geonamescache {
     pub fn new() -> Geonamescache {
         Self {
             us_states: load_us_states(),
-            continents: load_data(include_str!("continents.json")),
-            countries: load_data(include_str!("countries.json")),
-            cities: load_data(include_str!("cities.json")),
-            us_counties: load_data(include_str!("us_counties.json")),
+            continents: load_data!("continents.json"),
+            countries: load_data!("countries.json"),
+            cities: load_data!("cities.json"),
+            us_counties: load_data!("us_counties.json"),
             cities_by_name_cache: Mutex::new(HashMap::new()),
         }
     }
@@ -81,10 +86,6 @@ impl<'a> Default for Geonamescache {
     fn default() -> Self {
         Self::new()
     }
-}
-
-fn load_data<'de, T: Deserialize<'de>>(data_str: &'de str) -> T {
-    serde_json::from_str(data_str).unwrap()
 }
 
 pub fn load_us_states() -> HashMap<String, UsState> {

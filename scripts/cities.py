@@ -46,5 +46,5 @@ for record in reader:
         "alternatenames": alternatenames.split(","),
     }
 
-with open("src/cities.json", "w") as f:
-    json.dump(cities, f)
+with open("src/cities.json", "w", encoding="utf-8") as f:
+    json.dump(cities, f, separators=(",", ":"), ensure_ascii=False)

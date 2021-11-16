@@ -11,5 +11,5 @@ with open("data/us_counties.txt", "r", encoding="utf-8") as f:
     for line in r:
         counties.append({"fips": line[1] + line[2], "name": line[3], "state": line[0]})
 
-with open("src/us_counties.json", "w") as f:
-    json.dump(counties, f)
+with open("src/us_counties.json", "w", encoding="utf-8") as f:
+    json.dump(counties, f, separators=(",", ":"), ensure_ascii=False)

@@ -54,5 +54,5 @@ for record in reader:
         "neighbours": neighbours,
     }
 
-with open("src/countries.json", "w") as f:
-    json.dump(countries, f)
+with open("src/countries.json", "w", encoding="utf-8") as f:
+    json.dump(countries, f, separators=(",", ":"), ensure_ascii=False)
