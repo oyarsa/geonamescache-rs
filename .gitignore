@@ -1,0 +1,9 @@
+/target
+Cargo.lock
+.vscode
+/dist
+__pycache__
+*.pyc
+*.so
+*.lib
+*.dll
