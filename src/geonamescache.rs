@@ -105,19 +105,16 @@ pub fn load_us_states() -> HashMap<String, UsState> {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::Mutex;
-
     use more_asserts::assert_ge;
     use once_cell::sync::Lazy;
 
     use super::*;
 
-    static GC: Lazy<Mutex<Geonamescache>> = Lazy::new(|| Mutex::new(Geonamescache::new()));
+    static GC: Lazy<Geonamescache> = Lazy::new(|| Geonamescache::new());
 
     #[test]
     fn test_continents() {
-        let gc = GC.lock().unwrap();
-        let continents = gc.get_continents();
+        let continents = GC.get_continents();
         let test_data = [
             ("AF", "Africa"),
             ("AN", "Antarctica"),
@@ -141,8 +138,7 @@ mod tests {
 
     #[test]
     fn test_get_countries() {
-        let gc = GC.lock().unwrap();
-        let countries = gc.get_countries();
+        let countries = GC.get_countries();
         let test_data = [("ES", "Spain"), ("FR", "France"), ("US", "United States")];
 
         for (code, name) in test_data {
@@ -158,8 +154,7 @@ mod tests {
 
     #[test]
     fn test_us_states() {
-        let gc = GC.lock().unwrap();
-        let us_states = gc.get_us_states();
+        let us_states = GC.get_us_states();
         let test_data = [("NM", "New Mexico"), ("CA", "California"), ("NV", "Nevada")];
 
         for (code, name) in test_data {
@@ -175,17 +170,15 @@ mod tests {
 
     #[test]
     fn test_get_countries_by_names() {
-        let gc = GC.lock().unwrap();
-        let countries = gc.get_countries();
-        let by_name = gc.get_countries_by_names();
+        let countries = GC.get_countries();
+        let by_name = GC.get_countries_by_names();
 
         assert_eq!(countries.len(), by_name.len());
     }
 
     #[test]
     fn test_get_cities() {
-        let gc = GC.lock().unwrap();
-        let cities = gc.get_cities();
+        let cities = GC.get_cities();
         let test_data = [("3191316", "Samobor"), ("3107112", "Rivas-Vaciamadrid")];
         for (gid, name) in test_data {
             let c = cities.get(gid).unwrap();
@@ -195,15 +188,13 @@ mod tests {
 
     #[test]
     fn test_get_cities_by_name_madrid() {
-        let gc = GC.lock().unwrap();
-        let madrids = gc.get_cities_by_name("Madrid");
+        let madrids = GC.get_cities_by_name("Madrid");
         assert_eq!(2, madrids.len());
     }
 
     #[test]
     fn test_cities_in_us_states() {
-        let gc = GC.lock().unwrap();
-        let cities = gc.get_cities();
+        let cities = GC.get_cities();
         let test_data = [("4164138", "Miami", "FL"), ("4525353", "Springfield", "OH")];
         for (gid, name, us_state) in test_data {
             let city = cities.get(gid).unwrap();
@@ -217,18 +208,16 @@ mod tests {
 
     #[test]
     fn test_search_cities() {
-        let gc = GC.lock().unwrap();
         let city_names = ["Kiev", "kiev"];
         for name in city_names {
-            let cities = gc.search_cities(name);
+            let cities = GC.search_cities(name);
             assert_ge!(cities.len(), 1, "{}", name);
         }
     }
 
     #[test]
     fn test_us_counties_len() {
-        let gc = GC.lock().unwrap();
-        let us_counties = gc.get_us_counties();
+        let us_counties = GC.get_us_counties();
         assert_ge!(3234, us_counties.len());
     }
 }
